@@ -114,7 +114,7 @@ public class DataBaseConnector {
         }
     }
 
-   /* xep hang phong bam*/
+   /* xep hang phong ban*/
    public void calculateDepartmentRanking(int departmentId) {
        try {
            String query = "SELECT COUNT(*) AS EmployeeCount FROM Users WHERE DepartmentID = ?";
