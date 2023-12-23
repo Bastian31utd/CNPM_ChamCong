@@ -9,19 +9,21 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    private static Stage stg;
+    private static Stage currentStage;
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        stg=primaryStage;
-        primaryStage.setResizable(false);
-        Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
-        primaryStage.setTitle("Log in");
-        primaryStage.setScene(new Scene(root, 600, 400));
-        primaryStage.show();
+    public void start(Stage stage) throws IOException {
+        currentStage = stage;
+        stage.setResizable(false);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("start-view.fxml"));
+        stage.setTitle("Hệ thống quản lý chấm công");
+        stage.setScene(new Scene(fxmlLoader.load(), 600, 400));
+        stage.show();
     }
     public void changeScene(String fxml) throws IOException {
         Parent pane = FXMLLoader.load(getClass().getResource(fxml));
-        stg.getScene().setRoot(pane);
+        currentStage.getScene().setRoot(pane);
     }
-    public static void main(String[] args) { launch(args); }
+    public static void main(String[] args) {
+        launch();
+    }
 }

@@ -23,18 +23,21 @@ public class login {
     public void loginbutton(ActionEvent event) throws IOException {
         checklogin();
     }
-    private void checklogin() throws IOException{
-        HelloApplication m= new HelloApplication();
-        //Check thông tin đăng nhập hợp lệ (đang lấy vd là javacoding với 123)
-        if(username.getText().toString().equals("javacoding") && pass.getText().toString().equals("123")) { wronglogin.setText("Success!");
-            m.changeScene("home.fxml");
+    private void checklogin() throws IOException {
+        HelloApplication tmp = new HelloApplication();
+        // Check thông tin đăng nhập hợp lệ (đang lấy vd là javacoding với 123)
+        if (username.getText().toString().equals("javacoding") && pass.getText().toString().equals("123")) {
+            wronglogin.setText("Success!");
+            tmp.changeScene("home.fxml");
         }
-        //kiểm tra nếu 2 trường đều trống
-        else if(username.getText().isEmpty() && pass.getText().isEmpty()) { wronglogin.setText("Please enter your data.");
+        // Kiểm tra nếu 2 trường đều trống
+        else
+        if(username.getText().isEmpty() && pass.getText().isEmpty()) {
+            wronglogin.setText("Please enter your data.");
         }
-        //nếu thếu 1 trong 2
+        // Nếu thếu 1 trong 2
         else {
             wronglogin.setText("Wrong username or password!");
         }
     }
-    }
+}
