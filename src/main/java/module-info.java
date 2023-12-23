@@ -9,7 +9,7 @@ module com.example.cnpm {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
-    requires com.almasb.fxgl.all;
+    requires java.sql;
 
     opens com.example.cnpm to javafx.fxml;
     exports com.example.cnpm;
