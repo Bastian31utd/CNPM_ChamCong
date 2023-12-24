@@ -16,7 +16,7 @@
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="181.0" BorderPane.alignment="CENTER">
          <children>
-            <Hyperlink layoutX="113.0" layoutY="300.0" text="Forgot Your Password ? " />
+            <Hyperlink layoutX="116.0" layoutY="306.0" text="Forgot Your Password?" />
             <ImageView fitHeight="49.0" fitWidth="48.0" layoutX="158.0" layoutY="42.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@679a8ce044245372ca495c4c9c151225.png" />
@@ -33,7 +33,7 @@
                </font>
             </Label>
             <PasswordField fx:id="pass" layoutX="128.0" layoutY="197.0" prefHeight="25.0" prefWidth="183.0" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" text="password" />
-            <Button layoutX="144.0" layoutY="271.0" mnemonicParsing="false" onAction="#loginbutton" prefHeight="25.0" prefWidth="73.0" style="-fx-background-color: #0598ff;" text="Log in" textFill="WHITE">
+            <Button layoutX="144.0" layoutY="271.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="25.0" prefWidth="73.0" style="-fx-background-color: #0598ff;" text="Log in" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font></Button>
@@ -44,6 +44,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
+            <Hyperlink layoutX="130.0" layoutY="334.0" onAction="#backToStartView" text="Back to Start View" />
          </children>
       </AnchorPane>
    </center>

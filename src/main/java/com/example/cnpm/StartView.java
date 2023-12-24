@@ -13,7 +13,7 @@ public class StartView {
     @FXML
     public void onCheckinClick(MouseEvent event) throws IOException {
         Runtime.getRuntime()
-                .exec(String.format("cmd.exe /c python %s", "D:\\Work\\Project\\FaceRecognitionWithGUI\\src\\main\\java\\com\\example\\facerecognitionwithgui\\main_video.py"));
+                .exec(String.format("cmd.exe /c python %s", "D:\\Work\\Project\\CNPM_ChamCong\\src\\main\\java\\com\\example\\cnpm\\main_video.py"));
     }
 
     public void onLoginClick(MouseEvent event) throws IOException {

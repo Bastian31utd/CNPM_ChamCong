@@ -20,10 +20,16 @@ public class login {
     private Label wronglogin;
 
     @FXML
-    public void loginbutton(ActionEvent event) throws IOException {
-        checklogin();
+    public void loginButton(ActionEvent event) throws IOException {
+        checkLogin();
     }
-    private void checklogin() throws IOException {
+
+    public void backToStartView(ActionEvent event) throws IOException {
+        HelloApplication tmp = new HelloApplication();
+        tmp.changeScene("start-view.fxml");
+    }
+
+    private void checkLogin() throws IOException {
         HelloApplication tmp = new HelloApplication();
         // Check thông tin đăng nhập hợp lệ (đang lấy vd là javacoding với 123)
         if (username.getText().toString().equals("javacoding") && pass.getText().toString().equals("123")) {
