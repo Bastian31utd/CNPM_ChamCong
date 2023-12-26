@@ -2,13 +2,10 @@ package com.example.cnpm;
 
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
 public class StartView {
-    @FXML
-    private Pane checkin, login;
 
     @FXML
     public void onCheckinClick(MouseEvent event) throws IOException {
