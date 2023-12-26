@@ -27,13 +27,11 @@ while True:
         cv2.putText(frame, name, (x1, y1 - 10), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 0, 200), 2)
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 0, 200), 4)
 
-    # cv2.namedWindow("Frame", cv2.WINDOW_AUTOSIZE)
-    # cv2.setWindowProperty("Frame", cv2.WND_PROP_TOPMOST, 1)
-    cv2.imshow("Frame", frame)
+    cv2.imshow("Camera", frame)
 
     key = cv2.waitKey(1)
     if key == 27:
-        cv2.destroyWindow("Frame")
+        cv2.destroyWindow("Camera")
         checkinTime = time.time()
         pTime = time.strftime("%H:%M:%S %d-%m-%Y", time.localtime(checkinTime))
 
@@ -44,16 +42,12 @@ while True:
 
         if len(face_names) == 0 or len(face_names) == cnt:
             cv2.destroyAllWindows()
-            # cv2.namedWindow("Khong phat hien khuon mat da duoc dang ky   ", cv2.WINDOW_AUTOSIZE)
-            # cv2.setWindowProperty("Khong phat hien khuon mat da duoc dang ky   ", cv2.WND_PROP_TOPMOST, 1)
             cv2.imshow("Khong phat hien khuon mat da duoc dang ky   " + pTime, frame)
 
             # Print to terminal
             print("Khong phat hien khuon mat nao da duoc dang ky")
         else:
             cv2.destroyAllWindows()
-            # cv2.namedWindow("Check-in thanh cong   ", cv2.WINDOW_AUTOSIZE)
-            # cv2.setWindowProperty("Check-in thanh cong   ", cv2.WND_PROP_TOPMOST, 1)
             cv2.imshow("Check-in thanh cong   " + pTime, frame)
 
             # Print to terminal
