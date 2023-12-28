@@ -21,14 +21,21 @@ public class login {
 
     @FXML
     void forgotpass(ActionEvent event) throws IOException {
-        HelloApplication change= new HelloApplication();
+        HelloApplication change = new HelloApplication();
         change.changeScene("forgotpass.fxml");
     }
 
     @FXML
-    public void loginbutton(ActionEvent event) throws IOException {
+    void backToStartView(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeScene("start-view.fxml");
+    }
+
+    @FXML
+    public void loginButton(ActionEvent event) throws IOException {
         checklogin();
     }
+
     private void checklogin() throws IOException {
         HelloApplication m = new HelloApplication();
 
@@ -51,8 +58,7 @@ public class login {
                 } else {
                     m.changeSceneToHomeuser("homeuser.fxml", userID);
                 }
-            }
-            else {
+            } else {
                 wronglogin.setText("Login failed");
             }
         }
