@@ -2,6 +2,7 @@ package com.example.cnpm;
 
 import java.sql.*;
 
+
 public class DataBaseConnector {
     private static Connection connection;
     private final String databaseName;
@@ -13,16 +14,28 @@ public class DataBaseConnector {
     public void connect() {
         try {
             // Load SQLite JDBC driver
-            Class.forName("org.sqlite.JDBC");
+//            Class.forName("org.sqlite.JDBC");
 
             // Establish connection to the database
             connection = DriverManager.getConnection("jdbc:sqlite:" + databaseName);
 
             System.out.println("Connected to the database.");
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.err.println("Failed to connect to the database: " + e.getMessage());
         }
     }
+
+    public void disconnect() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+                System.out.println("Disconnected from the database.");
+            }
+        } catch (SQLException e) {
+            System.err.println("Failed to disconnect from the database: " + e.getMessage());
+        }
+    }
+
     /* Tra cuu ca lam viec cu the cua nhan vien*/
     public void getWorkScheduleForEmployee(int UsersId) {
         try {
@@ -73,6 +86,7 @@ public class DataBaseConnector {
         }
     }
 
+    /* Tinh tong so nhan vien */
     private int getTotalEmployees() {
         try {
             String query = "SELECT COUNT(*) AS total_employees FROM Users";
@@ -114,52 +128,128 @@ public class DataBaseConnector {
         }
     }
 
-   /* xep hang phong bam*/
-   public void calculateDepartmentRanking(int departmentId) {
-       try {
-           String query = "SELECT COUNT(*) AS EmployeeCount FROM Users WHERE DepartmentID = ?";
-           PreparedStatement employeeCountStmt = connection.prepareStatement(query);
-           employeeCountStmt.setInt(1, departmentId);
-           ResultSet employeeCountResult = employeeCountStmt.executeQuery();
+    /* Lấy RoleID của người dùng dựa trên UserID */
+    public int getRoleID(String userID) {
+        try {
+            String query = "SELECT RoleID FROM Users WHERE UserID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, userID);
 
-           int employeeCount = 0;
-           if (employeeCountResult.next()) {
-               employeeCount = employeeCountResult.getInt("EmployeeCount");
-           }
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.getInt("RoleID");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Xử lý lỗi theo ý bạn
+            return -1;
+        }
+    }
 
-           String performanceQuery = "SELECT SUM(Overtime) AS TotalOvertime, " +
-                   "SUM(DaysOff) AS TotalDaysOff, " +
-                   "SUM(Late) AS TotalLate " +
-                   "FROM PerformanceData WHERE UserID IN " +
-                   "(SELECT UserID FROM Users WHERE DepartmentID = ?)";
-           PreparedStatement performanceStmt = connection.prepareStatement(performanceQuery);
-           performanceStmt.setInt(1, departmentId);
-           ResultSet performanceResult = performanceStmt.executeQuery();
+    /* Kiểm tra thông tin đăng nhập */
+    public String kiemTraDangNhap(String tenDangNhap, String matKhau) {
+        try {
+            // Chuẩn bị truy vấn SQL
+            String sql = "SELECT UserID FROM Users WHERE Username = ? AND PasswordHash = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, tenDangNhap);
+            statement.setString(2, matKhau);
 
-           int totalOvertime = 0;
-           int totalDaysOff = 0;
-           int totalLate = 0;
-           if (performanceResult.next()) {
-               totalOvertime = performanceResult.getInt("TotalOvertime");
-               totalDaysOff = performanceResult.getInt("TotalDaysOff");
-               totalLate = performanceResult.getInt("TotalLate");
-           }
+            // Thực hiện truy vấn và lấy kết quả
+            ResultSet resultSet = statement.executeQuery();
 
-           // Bây giờ bạn có thể tính toán xếp hạng của phòng/ban dựa trên các chỉ số hiệu suất đã tính được
-           // Ví dụ:
-           double departmentRanking = (totalOvertime + totalDaysOff + totalLate) / (double) employeeCount;
+            // Kiểm tra xem tập kết quả có hàng nào không
+            if (resultSet.next()) {
+                // Người dùng được tìm thấy, trả về UserID
+                String userId = resultSet.getString("UserID");
+                return userId;
+            } else {
+                // Người dùng không được tìm thấy, trả về null
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-           System.out.println("Department Ranking for Department ID " + departmentId + ": " + departmentRanking);
+    /*Truy vấn thông tin từ UserID*/
+    public String getUserInfoByUserID(String userID, int queryType) {
+        try {
+            String columnName = ""; // Tên cột tương ứng với loại truy vấn
 
-           // Đóng các tài nguyên
-           employeeCountResult.close();
-           employeeCountStmt.close();
-           performanceResult.close();
-           performanceStmt.close();
-       } catch (SQLException e) {
-           e.printStackTrace();
-       }
-   }
+            // Xác định tên cột dựa trên loại truy vấn
+            switch (queryType) {
+                case 1:
+                    columnName = "Name";
+                    break;
+                case 2:
+                    columnName = "PhoneNumber";
+                    break;
+                case 3:
+                    columnName = "Email";
+                    break;
+            }
+
+            // Chuẩn bị truy vấn SQL để lấy thông tin từ UserID
+            String sql = "SELECT " + columnName + " FROM Users WHERE UserID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, userID);
+
+            // Thực hiện truy vấn và lấy kết quả
+            ResultSet resultSet = statement.executeQuery();
+            // Lấy giá trị từ kết quả truy vấn
+            return resultSet.getString(columnName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
+
+    /*Xep hang phong ban*/
+    public void calculateDepartmentRanking(int departmentId) {
+        try {
+            String query = "SELECT COUNT(*) AS EmployeeCount FROM Users WHERE DepartmentID = ?";
+            PreparedStatement employeeCountStmt = connection.prepareStatement(query);
+            employeeCountStmt.setInt(1, departmentId);
+            ResultSet employeeCountResult = employeeCountStmt.executeQuery();
+
+            int employeeCount = 0;
+            if (employeeCountResult.next()) {
+                employeeCount = employeeCountResult.getInt("EmployeeCount");
+            }
+
+            String performanceQuery = "SELECT SUM(Overtime) AS TotalOvertime, " +
+                    "SUM(DaysOff) AS TotalDaysOff, " +
+                    "SUM(Late) AS TotalLate " +
+                    "FROM PerformanceData WHERE UserID IN " +
+                    "(SELECT UserID FROM Users WHERE DepartmentID = ?)";
+            PreparedStatement performanceStmt = connection.prepareStatement(performanceQuery);
+            performanceStmt.setInt(1, departmentId);
+            ResultSet performanceResult = performanceStmt.executeQuery();
+
+            int totalOvertime = 0;
+            int totalDaysOff = 0;
+            int totalLate = 0;
+            if (performanceResult.next()) {
+                totalOvertime = performanceResult.getInt("TotalOvertime");
+                totalDaysOff = performanceResult.getInt("TotalDaysOff");
+                totalLate = performanceResult.getInt("TotalLate");
+            }
+
+            // Bây giờ bạn có thể tính toán xếp hạng của phòng/ban dựa trên các chỉ số hiệu suất đã tính được
+            // Ví dụ:
+            double departmentRanking = (totalOvertime + totalDaysOff + totalLate) / (double) employeeCount;
+
+            System.out.println("Department Ranking for Department ID " + departmentId + ": " + departmentRanking);
+
+            // Đóng các tài nguyên
+            employeeCountResult.close();
+            employeeCountStmt.close();
+            performanceResult.close();
+            performanceStmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public static void main(String[] args) {
@@ -167,6 +257,9 @@ public class DataBaseConnector {
 
         // Connect to the database
         connector.connect();
+
+        // Disconnect from the database
+        connector.disconnect();
     }
 
 }
