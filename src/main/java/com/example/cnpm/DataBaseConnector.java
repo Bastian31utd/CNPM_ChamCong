@@ -127,6 +127,79 @@ public class DataBaseConnector {
             e.printStackTrace();
         }
     }
+    /* Lấy RoleID của người dùng dựa trên UserID */
+    public int getRoleID(String userID) {
+        try {
+            String query = "SELECT RoleID FROM Users WHERE UserID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, userID);
+
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.getInt("RoleID");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Xử lý lỗi theo ý bạn
+            return -1;
+        }
+    }
+    /* Kiểm tra thông tin đăng nhập */
+    public String kiemTraDangNhap(String tenDangNhap, String matKhau) {
+        try {
+            // Chuẩn bị truy vấn SQL
+            String sql = "SELECT UserID FROM Users WHERE Username = ? AND PasswordHash = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, tenDangNhap);
+            statement.setString(2, matKhau);
+
+            // Thực hiện truy vấn và lấy kết quả
+            ResultSet resultSet = statement.executeQuery();
+
+            // Kiểm tra xem tập kết quả có hàng nào không
+            if (resultSet.next()) {
+                // Người dùng được tìm thấy, trả về UserID
+                String userId = resultSet.getString("UserID");
+                return userId;
+            } else {
+                // Người dùng không được tìm thấy, trả về null
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    /*Truy vấn thông tin từ UserID*/
+    public String getUserInfoByUserID(String userID, int queryType) {
+        try {
+            String columnName = ""; // Tên cột tương ứng với loại truy vấn
+
+            // Xác định tên cột dựa trên loại truy vấn
+            switch (queryType) {
+                case 1:
+                    columnName = "Name";
+                    break;
+                case 2:
+                    columnName = "PhoneNumber";
+                    break;
+                case 3:
+                    columnName = "Email";
+                    break;
+            }
+
+            // Chuẩn bị truy vấn SQL để lấy thông tin từ UserID
+            String sql = "SELECT " + columnName + " FROM Users WHERE UserID = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, userID);
+
+            // Thực hiện truy vấn và lấy kết quả
+            ResultSet resultSet = statement.executeQuery();
+                // Lấy giá trị từ kết quả truy vấn
+                return resultSet.getString(columnName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Error";
+        }
+    }
 
     /* Lấy RoleID của người dùng dựa trên UserID */
     public int getRoleID(String userID) {
