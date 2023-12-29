@@ -20,24 +20,49 @@ public class login {
     private Label wronglogin;
 
     @FXML
-    public void loginbutton(ActionEvent event) throws IOException {
+    void forgotpass(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeScene("forgotpass.fxml");
+    }
+
+    @FXML
+    void backToStartView(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeScene("start-view.fxml");
+    }
+
+    @FXML
+    public void loginButton(ActionEvent event) throws IOException {
         checklogin();
     }
+
     private void checklogin() throws IOException {
-        HelloApplication tmp = new HelloApplication();
-        // Check thông tin đăng nhập hợp lệ (đang lấy vd là javacoding với 123)
-        if (username.getText().toString().equals("javacoding") && pass.getText().toString().equals("123")) {
-            wronglogin.setText("Success!");
-            tmp.changeScene("home.fxml");
-        }
-        // Kiểm tra nếu 2 trường đều trống
-        else
-        if(username.getText().isEmpty() && pass.getText().isEmpty()) {
+        HelloApplication m = new HelloApplication();
+
+        if (username.getText().isEmpty() || pass.getText().isEmpty()) {
             wronglogin.setText("Please enter your data.");
-        }
-        // Nếu thếu 1 trong 2
-        else {
-            wronglogin.setText("Wrong username or password!");
+        } else {
+            // Sử dụng thử phương thức kiemTraDangNhap từ DataBaseConnector
+            DataBaseConnector connector = new DataBaseConnector();
+            connector.connect();
+
+            // Gọi phương thức kiemTraDangNhap
+            String userID = connector.kiemTraDangNhap(username.getText(), pass.getText());
+
+            if (userID != null) {
+                // Kiểm tra RoleID
+                int roleID = connector.getRoleID(userID);
+                // Thực hiện các xử lý tiếp theo dựa trên RoleID
+                if (roleID == 1) {
+                    m.changeSceneToHomeAdmin("homeadmin.fxml", userID);
+                } else {
+                    m.changeSceneToHomeuser("homeuser.fxml", userID);
+                }
+            } else {
+                wronglogin.setText("Login failed");
+            }
         }
     }
+
+
 }
