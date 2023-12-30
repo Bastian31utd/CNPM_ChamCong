@@ -1,16 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.cnpm.WorkSchedule1">
 
-    <VBox alignment="center" spacing="10">
-        <TextField fx:id="employeeNameField" promptText="Nhập tên nhân viên" />
-        <Button text="Tìm kiếm" onAction="#searchButtonClicked" />
-        <ListView fx:id="workScheduleListView" />
-    </VBox>
-
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cnpm.WorkSchedule1">
+   <center>
+      <AnchorPane prefHeight="379.0" prefWidth="399.0">
+      
+          <VBox alignment="center" prefHeight="472.0" prefWidth="432.0" spacing="10" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+              <TextField fx:id="employeeNameField" alignment="CENTER" prefHeight="49.0" prefWidth="375.0" promptText="Nhập tên nhân viên" />
+              <ListView fx:id="workScheduleListView" prefHeight="302.0" prefWidth="422.0" />
+          </VBox>
+      
+      </AnchorPane>
+   </center>
+   <right>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="2.0" top="5.0" />
+         </BorderPane.margin>
+         <children>
+            <VBox prefHeight="400.0" prefWidth="222.0">
+               <children>
+                    <Button contentDisplay="CENTER" onAction="#searchButtonClicked" prefHeight="29.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Tìm kiếm" textAlignment="CENTER" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets left="15.0" top="5.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Button contentDisplay="CENTER" layoutX="25.0" layoutY="15.0" onAction="#backButtonClicked" prefHeight="29.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Trở về" textAlignment="CENTER" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets left="15.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </right>
+</BorderPane>
