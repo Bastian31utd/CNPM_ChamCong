@@ -1,25 +1,31 @@
-import cv2
-import time
 import os
 import sqlite3
+import time
+
+import cv2
+
 
 def connect_to_database():
     try:
-        conn = sqlite3.connect('/Users/admin/IdeaProjects/CNPM_ChamCong/database.db')
+        conn = sqlite3.connect("D:\Work\Project\CNPM_ChamCong\database.db")
         return conn
     except sqlite3.Error as e:
         print("Lỗi khi kết nối đến cơ sở dữ liệu:", e)
         return None
 
+
 def insert_attendance(conn, user_id, checkin_time, datetime):
     try:
         cursor = conn.cursor()
         late = 1 if checkin_time >= "08:00:00" else 0
-        cursor.execute("INSERT INTO Attendance (userID, WorkDate, CheckInTime,Late) VALUES (?,?,?,?)", (user_id, datetime,checkin_time,late))
+        cursor.execute("INSERT INTO Attendance (userID, WorkDate, CheckInTime,Late) VALUES (?,?,?,?)",
+                       (user_id, datetime, checkin_time, late))
         conn.commit()
         print("Đã thêm dữ liệu check-in vào cơ sở dữ liệu.")
     except sqlite3.Error as e:
         print("Lỗi khi thêm dữ liệu check-in:", e)
+
+
 def get_user_info(conn, user_id):
     try:
         cursor = conn.cursor()
@@ -29,12 +35,16 @@ def get_user_info(conn, user_id):
     except sqlite3.Error as e:
         print("Lỗi khi truy vấn thông tin người dùng:", e)
         return ""
+
+
 def get_current_dir():
     return os.path.dirname(os.path.abspath(__file__))
+
 
 path = get_current_dir() + "\\images\\"
 
 from simple_facerec import SimpleFacerec
+
 sfr = SimpleFacerec()
 sfr.load_encoding_images(path)
 
@@ -77,15 +87,15 @@ while True:
             # Print to terminal
             for rid in face_names:
                 if rid != "Unknown":
-                    print("Check-in thanh cong: " + get_user_info(conn,rid))
-                    print("Thoi gian check-in: " + pTime +" "+dTime)
+                    print("Check-in thanh cong: " + get_user_info(conn, rid))
+                    print("Thoi gian check-in: " + pTime + " " + dTime)
 
-            # Insert dữ liệu vào cơ sở dữ liệu
+            # Insert into database
             for rid in face_names:
                 if rid != "Unknown":
                     user_id = rid
                     if conn is not None:
-                        insert_attendance(conn, user_id, pTime,dTime)
+                        insert_attendance(conn, user_id, pTime, dTime)
                         conn.close()
                     else:
                         print("Không thể kết nối đến cơ sở dữ liệu.")
