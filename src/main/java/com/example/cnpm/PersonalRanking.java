@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
@@ -25,8 +26,15 @@ public class PersonalRanking implements Initializable {
 
     @FXML
     private TableColumn<PersonalRankingRow, String> nameColumn;
+    private String userID; // Thêm trường dữ liệu để lưu UserID
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
     @FXML
-    public void backButtonClicked(ActionEvent actionEvent) {
+    public void backButtonClicked(ActionEvent actionEvent) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeSceneToHomeAdmin("homeadmin.fxml", userID);
     }
 
     @FXML

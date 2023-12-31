@@ -10,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,10 +26,15 @@ public class WorkSchedule2 implements Initializable {
     private DatePicker datePicker;
     @FXML
     private ComboBox<String> shiftComboBox;
+    private String userID; // Thêm trường dữ liệu để lưu UserID
 
-
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
     @FXML
-    public void backButtonClicked(ActionEvent actionEvent) {
+    public void backButtonClicked(ActionEvent actionEvent) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeSceneToHomeAdmin("homeadmin.fxml", userID);
     }
 
     @FXML

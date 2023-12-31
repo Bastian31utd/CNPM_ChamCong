@@ -31,5 +31,10 @@ public class forgotpass {
             done.setText("Your request has just been sent.");
         }
     }
+    @FXML
+    void backlogin(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeScene("login.fxml");
+    }
 
 }

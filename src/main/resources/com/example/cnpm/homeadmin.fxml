@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cnpm.Homeadmin">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cnpm.Homeadmin">
    <children>
       <BorderPane layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
          <right>
@@ -35,7 +35,7 @@
                               <Insets left="15.0" top="5.0" />
                            </VBox.margin>
                         </Button>
-                        <Button fx:id="currentlist" mnemonicParsing="false" onAction="#currentlist" prefHeight="28.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Trạng thái làm việc hiện tại" textFill="WHITE">
+                        <Button fx:id="currentlist" mnemonicParsing="false" onAction="#currentlist" prefHeight="28.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Truy xuất ca làm việc" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -44,6 +44,22 @@
                            </VBox.margin>
                         </Button>
                         <Button fx:id="rankingall" mnemonicParsing="false" onAction="#rankingall" prefHeight="28.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Xếp hạng nhân viên" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" top="5.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button fx:id="rankingalldepartment" layoutX="25.0" layoutY="118.0" mnemonicParsing="false" onAction="#rankingalldepartment" prefHeight="28.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Xếp hạng phòng,ban" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="15.0" top="5.0" />
+                           </VBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#logout" prefHeight="28.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Đăng xuất" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>

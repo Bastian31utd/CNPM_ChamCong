@@ -261,4 +261,7 @@ public class DataBaseConnector {
         connector.disconnect();
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
 }

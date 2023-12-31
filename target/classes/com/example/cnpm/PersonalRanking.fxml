@@ -16,7 +16,7 @@
          <children>
             <VBox layoutY="14.0" prefHeight="386.0" prefWidth="222.0">
                <children>
-                  <Button contentDisplay="CENTER" layoutX="25.0" layoutY="55.0" onAction="#handleSortButto" prefHeight="29.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Xếp hạng cá nhân" textAlignment="CENTER" textFill="WHITE">
+                  <Button contentDisplay="CENTER" layoutX="25.0" layoutY="55.0" onAction="#handleSortButton" prefHeight="29.0" prefWidth="190.0" style="-fx-background-color: #0598ff;" text="Xếp hạng cá nhân" textAlignment="CENTER" textFill="WHITE">
                      <VBox.margin>
                         <Insets left="15.0" top="10.0" />
                      </VBox.margin>

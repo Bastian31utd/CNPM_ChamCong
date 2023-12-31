@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,17 +25,22 @@ public class PersonalRanking2 implements Initializable {
     private TableColumn<PersonalRankingRow2, String> rankColumn;
 
     @FXML
-    private TableColumn<PersonalRankingRow2, String> departmentIdColumn;
+    private TableColumn<PersonalRankingRow2, String> departmentIDColumn;
 
     @FXML
     private TableColumn<PersonalRankingRow2, String> departmentNameColumn;
+    private String userID; // Thêm trường dữ liệu để lưu UserID
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
     DataBaseConnector db = new DataBaseConnector();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         rankColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getrank()));
-        departmentIdColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDepartmentID()));
+        departmentIDColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDepartmentID()));
         departmentNameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDepartmentName()));
 
 
@@ -81,6 +87,8 @@ public class PersonalRanking2 implements Initializable {
         departmentsRanking();
     }
 
-    public void backButtonClicked(ActionEvent actionEvent) {
+    public void backButtonClicked(ActionEvent actionEvent) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeSceneToHomeAdmin("homeadmin.fxml", userID);
     }
 }
