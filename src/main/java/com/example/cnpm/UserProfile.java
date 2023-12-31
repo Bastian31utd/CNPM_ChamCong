@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -26,6 +27,7 @@ import java.util.ResourceBundle;
 public class UserProfile implements Initializable {
     private double xOffset;
     private double yOffset;
+    private Stage stage;
     public User user;
     @FXML
     private TextField roomTextField;
@@ -73,8 +75,9 @@ public class UserProfile implements Initializable {
     }
 
     // Hàm để thiết lập tính chất chỉnh sửa cho các TextField
-    public void setUser(User user) {
+    public void setUser(User user, Stage stage) {
         this.user = user;
+        this.stage = stage;
         nameTextField.setText(user.getName());
         mailTextField.setText(user.getEmail());
         phoneTextField.setText(user.getPhone());
@@ -180,6 +183,11 @@ public class UserProfile implements Initializable {
     void minimizeStage() {
         Stage stage = (Stage) nameTextField.getScene().getWindow();
         stage.setIconified(true);
+    }
+    @FXML
+    void logOut() throws IOException {
+        Parent pane = FXMLLoader.load(getClass().getResource("start-view.fxml"));
+        this.stage.getScene().setRoot(pane);
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

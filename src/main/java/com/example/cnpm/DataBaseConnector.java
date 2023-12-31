@@ -34,16 +34,7 @@ public class DataBaseConnector {
         }
     }
 
-    public void disconnect() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Disconnected from the database.");
-            }
-        } catch (SQLException e) {
-            System.err.println("Failed to disconnect from the database: " + e.getMessage());
-        }
-    }
+
 
     /* Tra cuu ca lam viec cu the cua nhan vien*/
     public void getWorkScheduleForEmployee(int UsersId) {
