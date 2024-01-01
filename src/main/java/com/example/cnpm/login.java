@@ -2,14 +2,24 @@ package com.example.cnpm;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class login {
-
+public class login implements Initializable {
+    private double xOffset;
+    private double yOffset;
+    @FXML
+    Pane taskBarPane;
     @FXML
     private PasswordField pass;
 
@@ -63,6 +73,28 @@ public class login {
             }
         }
     }
+    @FXML
+    void closeStage() {
+        Stage stage = (Stage) username.getScene().getWindow();
+        stage.close();
+    }
+    @FXML
+    void minimizeStage() {
+        Stage stage = (Stage) username.getScene().getWindow();
+        stage.setIconified(true);
+    }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        taskBarPane.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        taskBarPane.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX() - xOffset);
+            stage.setY(mouseEvent.getScreenY() - yOffset);
+        });
+    }
 
 }

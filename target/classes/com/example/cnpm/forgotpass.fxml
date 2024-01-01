@@ -60,4 +60,20 @@
          </children>
       </AnchorPane>
    </left>
+   <top>
+      <Pane fx:id="taskBarPane" prefHeight="23.0" prefWidth="516.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="16.0" fitWidth="18.0" layoutX="9.0" layoutY="4.0" onMouseClicked="#closeStage">
+               <image>
+                  <Image url="@../../../pic/close-mac-os-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="15.0" fitWidth="18.0" layoutX="26.0" layoutY="4.0" onMouseClicked="#minimizeStage">
+               <image>
+                  <Image url="@../../../pic/minimal-macos-icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+   </top>
 </BorderPane>
