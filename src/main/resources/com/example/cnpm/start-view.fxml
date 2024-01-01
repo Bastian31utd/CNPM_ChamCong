@@ -14,19 +14,33 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cnpm.StartView">
    <children>
-      <Pane prefHeight="115.0" prefWidth="600.0" style="-fx-background-color: #0598FF;">
+      <Pane prefHeight="128.0" prefWidth="600.0" style="-fx-background-color: #0598FF;">
          <children>
-            <Text fill="WHITE" layoutX="32.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHÀO MỪNG BẠN ĐẾN VỚI HỆ THỐNG QUẢN LÝ CHẤM CÔNG" textAlignment="CENTER">
+            <Text fill="WHITE" layoutX="32.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CHÀO MỪNG BẠN ĐẾN VỚI HỆ THỐNG QUẢN LÝ CHẤM CÔNG" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Text>
-            <Text fill="WHITE" layoutX="269.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nhóm 12" textAlignment="CENTER">
+            <Text fx:id="label" fill="WHITE" layoutX="278.0" layoutY="82.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Trinhh" textAlignment="CENTER">
                <font>
                   <Font name="Bookman Old Style Italic" size="14.0" />
                </font>
             </Text>
          </children></Pane>
+      <Pane fx:id="taskBarPane" prefHeight="23.0" prefWidth="600.0" style="-fx-background-color: gray;">
+         <children>
+            <ImageView fitHeight="16.0" fitWidth="18.0" layoutX="9.0" layoutY="4.0" onMouseClicked="#closeStage">
+               <image>
+                  <Image url="@../../../pic/close-mac-os-icon.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="15.0" fitWidth="18.0" layoutX="26.0" layoutY="4.0" onMouseClicked="#minimizeStage">
+               <image>
+                  <Image url="@../../../pic/minimal-macos-icon.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
       <HBox alignment="CENTER" layoutX="72.0" layoutY="139.0" prefHeight="239.0" prefWidth="456.0">
          <children>
             <Pane onMouseClicked="#onCheckinClick" onMousePressed="#onCheckinClick" prefHeight="200.0" prefWidth="200.0">
