@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,10 +15,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class login implements Initializable {
-    private double xOffset;
-    private double yOffset;
     @FXML
     Pane taskBarPane;
+    private double xOffset;
+    private double yOffset;
     @FXML
     private PasswordField pass;
 
@@ -62,6 +61,7 @@ public class login implements Initializable {
             if (userID != null) {
                 // Kiểm tra RoleID
                 int roleID = connector.getRoleID(userID);
+                connector.disconnect();
                 // Thực hiện các xử lý tiếp theo dựa trên RoleID
                 if (roleID == 1) {
                     m.changeSceneToHomeAdmin("homeadmin.fxml", userID);
@@ -70,14 +70,17 @@ public class login implements Initializable {
                 }
             } else {
                 wronglogin.setText("Login failed");
+                connector.disconnect();
             }
         }
     }
+
     @FXML
     void closeStage() {
         Stage stage = (Stage) username.getScene().getWindow();
         stage.close();
     }
+
     @FXML
     void minimizeStage() {
         Stage stage = (Stage) username.getScene().getWindow();
@@ -91,7 +94,7 @@ public class login implements Initializable {
             yOffset = mouseEvent.getSceneY();
         });
         taskBarPane.setOnMouseDragged(mouseEvent -> {
-            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             stage.setX(mouseEvent.getScreenX() - xOffset);
             stage.setY(mouseEvent.getScreenY() - yOffset);
         });
