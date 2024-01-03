@@ -35,7 +35,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Label prefHeight="35.0" prefWidth="71.0" text="Dời đến:" textFill="#aa0000" GridPane.rowIndex="1">
+            <Label fx:id="labelMove" prefHeight="35.0" prefWidth="71.0" text="Dời đến:" textFill="#aa0000" GridPane.rowIndex="1">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>

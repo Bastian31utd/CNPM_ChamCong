@@ -62,6 +62,7 @@ public class login implements Initializable {
             if (userID != null) {
                 // Kiểm tra RoleID
                 int roleID = connector.getRoleID(userID);
+                connector.disconnect();
                 // Thực hiện các xử lý tiếp theo dựa trên RoleID
                 if (roleID == 1) {
                     m.changeSceneToHomeAdmin("homeadmin.fxml", userID);
@@ -70,7 +71,9 @@ public class login implements Initializable {
                 }
             } else {
                 wronglogin.setText("Login failed");
+                connector.disconnect();
             }
+
         }
     }
     @FXML
