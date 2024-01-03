@@ -1,10 +1,13 @@
-import face_recognition
-import cv2
-import os
 import glob
+import os
+
+import cv2
+import face_recognition
 import numpy as np
 
+
 class SimpleFacerec:
+
     def __init__(self):
         self.known_face_encodings = []
         self.known_face_names = []
@@ -62,6 +65,7 @@ class SimpleFacerec:
             best_match_index = np.argmin(face_distances)
             if matches[best_match_index]:
                 name = self.known_face_names[best_match_index]
+
             face_names.append(name)
             # print("Found: " + name)
 
