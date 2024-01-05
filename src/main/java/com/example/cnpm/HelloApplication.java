@@ -45,8 +45,6 @@ public class HelloApplication extends Application {
         stg.show();
     }
     public void changeSceneToHomeuser(String fxml, String userID) throws IOException {
-
-
         // Truyền UserID vào Homeadmin controller
         DataBaseConnector db = new DataBaseConnector();
         db.connect();
@@ -97,8 +95,19 @@ public class HelloApplication extends Application {
         PersonalRanking2 homeadminController = loader.getController();
         homeadminController.setUserID(userID);
 
-        Scene scene = new Scene(parent);
-        stg.setScene(scene);
+        // Truyền UserID vào Homeadmin controller
+        DataBaseConnector db = new DataBaseConnector();
+        db.connect();
+        User user = db.getUserProfileFromId(userID);
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserProfile.fxml"));
+        Parent root = fxmlLoader.load();
+        // Create a new stage
+        UserProfile controller = fxmlLoader.getController();
+        db.disconnect();
+        System.out.println(user.getName());
+        controller.setUser(user, stg);
+        stg.setTitle("Hệ thống quản lý chấm công");
+        stg.setScene(new Scene(root, 600, 400));
         stg.show();
     }
 
