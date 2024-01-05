@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,10 +16,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class login implements Initializable {
-    @FXML
-    Pane taskBarPane;
     private double xOffset;
     private double yOffset;
+    @FXML
+    Pane taskBarPane;
     @FXML
     private PasswordField pass;
 
@@ -94,7 +95,7 @@ public class login implements Initializable {
             yOffset = mouseEvent.getSceneY();
         });
         taskBarPane.setOnMouseDragged(mouseEvent -> {
-            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
             stage.setX(mouseEvent.getScreenX() - xOffset);
             stage.setY(mouseEvent.getScreenY() - yOffset);
         });
