@@ -110,6 +110,45 @@ public class HelloApplication extends Application {
         stg.setScene(new Scene(root, 600, 400));
         stg.show();
     }
+    public void changeSceneToWorkSchedule2(String fxml, String userID) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxml));
+        Parent parent = loader.load();
+
+        // Truyền UserID vào Homeadmin controller
+        WorkSchedule2 homeadminController = loader.getController();
+        homeadminController.setUserID(userID);
+
+        Scene scene = new Scene(parent);
+        stg.setScene(scene);
+        stg.show();
+    }
+    public void changeSceneToPersonalRanking(String fxml, String userID) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxml));
+        Parent parent = loader.load();
+
+        // Truyền UserID vào Homeadmin controller
+        PersonalRanking homeadminController = loader.getController();
+        homeadminController.setUserID(userID);
+
+        Scene scene = new Scene(parent);
+        stg.setScene(scene);
+        stg.show();
+    }
+    public void changeSceneToPersonalRanking2(String fxml, String userID) throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource(fxml));
+        Parent parent = loader.load();
+
+        // Truyền UserID vào Homeadmin controller
+        PersonalRanking2 homeadminController = loader.getController();
+        homeadminController.setUserID(userID);
+
+        Scene scene = new Scene(parent);
+        stg.setScene(scene);
+        stg.show();
+    }
 
     public static void main(String[] args) { launch(args); }
 }
