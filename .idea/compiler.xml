@@ -7,10 +7,8 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="FaceRecognitionWithGUI" />
+        <module name="CNPM" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="CNPM" target="20" />
-    </bytecodeTargetLevel>
   </component>
 </project>

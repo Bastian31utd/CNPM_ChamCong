@@ -5,6 +5,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+import java.io.IOException;
+
 public class Homeadmin {
 
     @FXML
@@ -12,6 +14,9 @@ public class Homeadmin {
 
     @FXML
     private Button rankingall;
+
+    @FXML
+    private Button rankingalldepartment;
 
     @FXML
     private Button requestsall;
@@ -52,12 +57,21 @@ public class Homeadmin {
         setemail.setText(Email1);
     }
     @FXML
-    void currentlist(ActionEvent event) {
-
+    void currentlist(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeSceneToWorkSchedule2("WorkSchedule2.fxml", userID);
     }
 
     @FXML
-    void rankingall(ActionEvent event) {
+    void rankingall(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeSceneToPersonalRanking("PersonalRanking.fxml", userID);
+
+    }
+    @FXML
+    void rankingalldepartment(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeSceneToPersonalRanking2("PersonalRanking2.fxml", userID);
 
     }
 
@@ -69,6 +83,11 @@ public class Homeadmin {
     @FXML
     void scheduleall(ActionEvent event) {
 
+    }
+    @FXML
+    void logout(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeScene("login.fxml");
     }
 
 }

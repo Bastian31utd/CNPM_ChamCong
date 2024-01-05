@@ -19,6 +19,10 @@ public class WorkSchedule1 implements Initializable {
     @FXML
     private ListView<String> workScheduleListView;
 
+    @FXML
+    public void backButtonClicked(ActionEvent actionEvent) {
+    }
+
     private Connection connection;
 
     @FXML
@@ -58,5 +62,6 @@ public class WorkSchedule1 implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // initialize logic
     }
+
 }
 
