@@ -8,7 +8,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,10 +15,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class login implements Initializable {
-    private double xOffset;
-    private double yOffset;
     @FXML
     Pane taskBarPane;
+    private double xOffset;
+    private double yOffset;
     @FXML
     private PasswordField pass;
 
@@ -50,28 +49,24 @@ public class login implements Initializable {
         HelloApplication m = new HelloApplication();
 
         if (username.getText().isEmpty() || pass.getText().isEmpty()) {
-            wronglogin.setText("Please enter your data.");
+            wronglogin.setText("Vui lòng nhập đủ dữ liệu");
         } else {
             // Sử dụng thử phương thức kiemTraDangNhap từ DataBaseConnector
-            DataBaseConnector connector = new DataBaseConnector();
-            connector.connect();
 
             // Gọi phương thức kiemTraDangNhap
-            String userID = connector.kiemTraDangNhap(username.getText(), pass.getText());
+            String userID = DataBaseConnector.INSTANCE.kiemTraDangNhap(username.getText(), pass.getText());
 
             if (userID != null) {
                 // Kiểm tra RoleID
-                int roleID = connector.getRoleID(userID);
-                connector.disconnect();
+                int roleID = DataBaseConnector.INSTANCE.getRoleID(userID);
                 // Thực hiện các xử lý tiếp theo dựa trên RoleID
                 if (roleID == 1) {
                     m.changeSceneToHomeAdmin("homeadmin.fxml", userID);
                 } else {
-                    m.changeSceneToHomeuser("homeuser.fxml", userID);
+                    m.changeSceneToHomeuser("UserProfile.fxml", userID);
                 }
             } else {
-                wronglogin.setText("Login failed");
-                connector.disconnect();
+                wronglogin.setText("Tên đăng nhập hoặc mật khẩu không đúng");
             }
         }
     }
@@ -95,7 +90,7 @@ public class login implements Initializable {
             yOffset = mouseEvent.getSceneY();
         });
         taskBarPane.setOnMouseDragged(mouseEvent -> {
-            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             stage.setX(mouseEvent.getScreenX() - xOffset);
             stage.setY(mouseEvent.getScreenY() - yOffset);
         });

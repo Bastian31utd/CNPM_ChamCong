@@ -1,8 +1,8 @@
 package com.example.cnpm;
+
 import javafx.beans.property.SimpleStringProperty;
 
-public class PersonalRankingRow2
-{
+public class PersonalRankingRow2 {
     private final SimpleStringProperty rank;
     private final SimpleStringProperty DepartmentID;
     private final SimpleStringProperty DepartmentName;
@@ -21,6 +21,7 @@ public class PersonalRankingRow2
         return DepartmentID.get();
     }
 
-    public String getDepartmentName() {return DepartmentName.get();
+    public String getDepartmentName() {
+        return DepartmentName.get();
     }
 }
