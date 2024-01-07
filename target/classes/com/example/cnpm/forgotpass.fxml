@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cnpm.forgotpass">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cnpm.forgotpass">
    <center>
       <AnchorPane prefHeight="400.0" prefWidth="181.0" BorderPane.alignment="CENTER">
          <children>
@@ -25,18 +25,18 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
-            <Button fx:id="sendrequest" layoutX="108.0" layoutY="251.0" mnemonicParsing="false" onAction="#sendrequest" prefHeight="29.0" prefWidth="125.0" style="-fx-background-color: #0598ff;" text="Send request" textFill="WHITE">
+            <Button fx:id="sendrequest" layoutX="125.0" layoutY="252.0" mnemonicParsing="false" onAction="#sendrequest" prefHeight="29.0" prefWidth="92.0" style="-fx-background-color: #0598ff;" text="Gửi yêu cầu" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <TextField fx:id="emailinfor" layoutX="114.0" layoutY="186.0" prefHeight="25.0" prefWidth="179.0" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" text="Your email" />
-            <Label layoutX="116.0" layoutY="90.0" text="ĐĂNG NHẬP" textFill="#0598ff">
+            <TextField fx:id="emailinfor" layoutX="114.0" layoutY="186.0" prefHeight="25.0" prefWidth="179.0" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" text="email" />
+            <Label layoutX="95.0" layoutY="90.0" text="QUÊN MẬT KHẨU" textFill="#0598ff">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="done" layoutX="116.0" layoutY="221.0" prefHeight="17.0" prefWidth="223.0" textFill="#960000" />
-            <Hyperlink layoutX="293.0" layoutY="5.0" onAction="#backlogin" text="Back">
+            <Label fx:id="done" layoutX="116.0" layoutY="221.0" prefHeight="17.0" prefWidth="223.0" textFill="RED" />
+            <Hyperlink layoutX="141.0" layoutY="289.0" onAction="#backlogin" text="Quay lại">
                <font>
                   <Font size="14.0" />
                </font>

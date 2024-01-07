@@ -93,7 +93,7 @@
             </Label>
          </children>
       </GridPane>
-      <Pane fx:id="taskBarPane" layoutX="-4.0" layoutY="-2.0" prefHeight="23.0" prefWidth="516.0" style="-fx-background-color: gray;">
+      <Pane fx:id="taskBarPane" layoutY="-1.0" prefHeight="23.0" prefWidth="504.0" style="-fx-background-color: gray;">
          <children>
             <ImageView fitHeight="16.0" fitWidth="18.0" layoutX="9.0" layoutY="4.0" onMouseClicked="#closeStage">
                <image>

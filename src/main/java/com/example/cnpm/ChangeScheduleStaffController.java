@@ -6,8 +6,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -21,39 +19,42 @@ public class ChangeScheduleStaffController implements Initializable {
     private double yOffset;
     private User user;
     private Stage stage;
-    public void setUser(User user, Stage stage) {
-        this.user = user;
-        this.stage = stage;
-        requestCb.getItems().addAll("Nghỉ", "Muộn", "Nghỉ phép", "Tăng ca", "Đổi lịch");
-    }
     @FXML
     private ChoiceBox requestCb;
     @FXML
     private DatePicker dateMove;
     @FXML
     private Pane taskBarPane;
+
+    public void setUser(User user, Stage stage) {
+        this.user = user;
+        this.stage = stage;
+        requestCb.getItems().addAll("Nghỉ", "Muộn", "Nghỉ phép", "Tăng ca", "Đổi lịch");
+    }
+
     @FXML
     void setRequestTypeTextField() {
         String requestType = (String) requestCb.getValue();
         LocalDate date = dateMove.getValue();
-        DataBaseConnector db = new DataBaseConnector();
-        db.connect();
-        db.sentRequestFromIdAndTime(user.getId(), requestType, Date.valueOf(date));
-        db.disconnect();
+        DataBaseConnector.INSTANCE.sentRequestFromIdAndTime(user.getId(), requestType, Date.valueOf(date));
         stage.close();
     }
+
     @FXML
     void setCancel() {
         stage.close();
     }
+
     @FXML
     void closeStage() {
         stage.close();
     }
+
     @FXML
     void minimizeStage() {
         stage.setIconified(true);
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -62,7 +63,7 @@ public class ChangeScheduleStaffController implements Initializable {
             yOffset = mouseEvent.getSceneY();
         });
         taskBarPane.setOnMouseDragged(mouseEvent -> {
-            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             stage.setX(mouseEvent.getScreenX() - xOffset);
             stage.setY(mouseEvent.getScreenY() - yOffset);
         });

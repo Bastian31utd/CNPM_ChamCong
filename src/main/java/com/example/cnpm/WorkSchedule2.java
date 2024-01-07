@@ -1,14 +1,15 @@
 package com.example.cnpm;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,8 +18,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class WorkSchedule2 implements Initializable {
@@ -26,31 +25,33 @@ public class WorkSchedule2 implements Initializable {
     private DatePicker datePicker;
     @FXML
     private ComboBox<String> shiftComboBox;
+    @FXML
+    private Label label;
+    @FXML
+    private Pane taskBarPane;
+    private double xOffset;
+    private double yOffset;
     private String userID; // Thêm trường dữ liệu để lưu UserID
+    @FXML
+    private TableView<WorkScheduleRow2> workScheduleTableView;
+    @FXML
+    private TableColumn<WorkScheduleRow2, String> rankColumn;
+    @FXML
+    private TableColumn<WorkScheduleRow2, String> userIDColumn;
+    @FXML
+    private TableColumn<WorkScheduleRow2, String> employeeNameColumn;
+    @FXML
+    private TableColumn<WorkScheduleRow2, String> statusColumn;
 
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
     @FXML
     public void backButtonClicked(ActionEvent actionEvent) throws IOException {
         HelloApplication change = new HelloApplication();
         change.changeSceneToHomeAdmin("homeadmin.fxml", userID);
     }
-
-    @FXML
-    private TableView<WorkScheduleRow2> workScheduleTableView;
-
-    @FXML
-    private TableColumn<WorkScheduleRow2, String> rankColumn;
-
-    @FXML
-    private TableColumn<WorkScheduleRow2, String> userIDColumn;
-
-    @FXML
-    private TableColumn<WorkScheduleRow2, String> employeeNameColumn;
-
-
-    DataBaseConnector db=new DataBaseConnector();
 
     @FXML
     private void searchButtonClicked() {
@@ -69,14 +70,13 @@ public class WorkSchedule2 implements Initializable {
     private ObservableList<WorkScheduleRow2> getWorkSchedulesForDateAndShift(String selectedDate, String selectedShift) {
         ObservableList<WorkScheduleRow2> schedules = FXCollections.observableArrayList();
         try {
-            db.connect();
-
-            String sql = "SELECT WorkSchedule.WorkDate, WorkSchedule.Shift, Users.UserID, Users.Name " +
+            String sql = "SELECT WorkSchedule.WorkDate, WorkSchedule.Shift, Users.UserID, Users.Name, Attendance.CheckInTime " +
                     "FROM WorkSchedule " +
                     "JOIN Users ON WorkSchedule.UserID = Users.UserID " +
+                    "LEFT JOIN Attendance ON WorkSchedule.UserID = Attendance.UserID AND WorkSchedule.WorkDate = Attendance.WorkDate " +
                     "WHERE WorkSchedule.WorkDate = ? AND WorkSchedule.Shift = ?";
 
-            PreparedStatement statement = db.getConnection().prepareStatement(sql);
+            PreparedStatement statement = DataBaseConnector.INSTANCE.getConnection().prepareStatement(sql);
             statement.setString(1, selectedDate);
             statement.setString(2, selectedShift);
 
@@ -88,10 +88,35 @@ public class WorkSchedule2 implements Initializable {
                 String shift = resultSet.getString("Shift");
                 String userId = resultSet.getString("UserID");
                 String userName = resultSet.getString("Name");
-                schedules.add(new WorkScheduleRow2(String.valueOf(rank), userId, userName));
+                String checkInTime = resultSet.getString("CheckInTime");
+
+                // Kiểm tra xem có dữ liệu check-in không
+                String status = checkInTime == null ? "Nghỉ" : "Đúng giờ"; // Mặc định là "Đúng giờ" nếu có check-in
+
+                // Kiểm tra thời gian check-in để xác định muộn
+                if (checkInTime != null && !checkInTime.isEmpty()) {
+                    if (selectedShift.equals("Sáng")) {
+                        String checkInHour = checkInTime.split(" ")[1]; // Lấy giờ từ thời gian check-in
+                        int hour = Integer.parseInt(checkInHour.split(":")[0]);
+                        int minute = Integer.parseInt(checkInHour.split(":")[1]);
+
+                        if (hour > 8 || (hour == 8 && minute > 0)) {
+                            status = "Muộn ca sáng";
+                        }
+                    } else if (selectedShift.equals("Chiều")) {
+                        String checkInHour = checkInTime.split(" ")[1]; // Lấy giờ từ thời gian check-in
+                        int hour = Integer.parseInt(checkInHour.split(":")[0]);
+                        int minute = Integer.parseInt(checkInHour.split(":")[1]);
+
+                        if (hour > 13 || (hour == 13 && minute > 30)) {
+                            status = "Muộn ca chiều";
+                        }
+                    }
+                }
+
+                schedules.add(new WorkScheduleRow2(String.valueOf(rank), userId, userName, status));
                 rank++;
             }
-            db.disconnect();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -106,9 +131,31 @@ public class WorkSchedule2 implements Initializable {
         rankColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getrank()));
         userIDColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getuserID()));
         employeeNameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEmployeeName()));
+        statusColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getStatus()));
 
         // Initialize table view with empty data or perform other initialization tasks
         workScheduleTableView.setItems(FXCollections.observableArrayList());
+
+        taskBarPane.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        taskBarPane.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX() - xOffset);
+            stage.setY(mouseEvent.getScreenY() - yOffset);
+        });
     }
 
+    @FXML
+    void closeStage() {
+        Stage stage = (Stage) label.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    void minimizeStage() {
+        Stage stage = (Stage) label.getScene().getWindow();
+        stage.setIconified(true);
+    }
 }

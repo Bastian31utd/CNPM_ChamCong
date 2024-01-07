@@ -15,10 +15,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class forgotpass implements Initializable {
-    private double xOffset;
-    private double yOffset;
     @FXML
     Pane taskBarPane;
+    private double xOffset;
+    private double yOffset;
     @FXML
     private Label done;
 
@@ -32,19 +32,27 @@ public class forgotpass implements Initializable {
     public void sendrequest(ActionEvent event) throws IOException {
         checkrequest();
     }
+
     private void checkrequest() throws IOException {
-        if(emailinfor.getText().isEmpty() || emailinfor.getText().toString().equals("Your email")) {
-            done.setText("Your data is empty");
-        }
-        else {
-            done.setText("Your request has just been sent.");
+        if (emailinfor.getText().isEmpty() || emailinfor.getText().equals("email")) {
+            done.setText("Vui lòng nhập đủ dữ liệu");
+        } else {
+            done.setText("Yêu cầu đã được gửi");
         }
     }
+
+    @FXML
+    void backlogin(ActionEvent event) throws IOException {
+        HelloApplication change = new HelloApplication();
+        change.changeScene("login.fxml");
+    }
+
     @FXML
     void closeStage() {
         Stage stage = (Stage) done.getScene().getWindow();
         stage.close();
     }
+
     @FXML
     void minimizeStage() {
         Stage stage = (Stage) done.getScene().getWindow();
@@ -58,10 +66,9 @@ public class forgotpass implements Initializable {
             yOffset = mouseEvent.getSceneY();
         });
         taskBarPane.setOnMouseDragged(mouseEvent -> {
-            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             stage.setX(mouseEvent.getScreenX() - xOffset);
             stage.setY(mouseEvent.getScreenY() - yOffset);
         });
     }
-
 }

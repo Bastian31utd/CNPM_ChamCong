@@ -1,5 +1,7 @@
 package com.example.cnpm;
+
 import javafx.beans.property.SimpleStringProperty;
+
 public class PersonalRankingRow {
     private final SimpleStringProperty rank;
     private final SimpleStringProperty userID;

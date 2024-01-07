@@ -30,21 +30,18 @@ public class Homeuser {
     public void setUserID(String userID) {
         this.userID = userID;
         // Thực hiện truy vấn để lấy Name từ database dựa trên userID
-        DataBaseConnector connector = new DataBaseConnector();
-        connector.connect();
-
         // Gọi phương thức để lấy Name từ UserID
-        String userName = connector.getUserInfoByUserID(userID,1);
+        String userName = DataBaseConnector.INSTANCE.getUserInfoByUserID(userID, 1);
         // Hiển thị Name lên Label setname
-        setname.setText(userName+" ( User )");
+        setname.setText(userName + " ( User )");
 
         // Gọi phương thức để lấy Phone từ UserID
-        String Phone = connector.getUserInfoByUserID(userID,2);
+        String Phone = DataBaseConnector.INSTANCE.getUserInfoByUserID(userID, 2);
         // Hiển thị phone lên Label setphone
         setphone.setText(Phone);
 
         // Gọi phương thức để lấy email từ UserID
-        String Email1 = connector.getUserInfoByUserID(userID,3);
+        String Email1 = DataBaseConnector.INSTANCE.getUserInfoByUserID(userID, 3);
         // Hiển thị email lên Label setemail
         setemail.setText(Email1);
     }
