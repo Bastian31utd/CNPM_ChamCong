@@ -1,4 +1,5 @@
 package com.example.cnpm;
+
 import com.example.cnpm.DatabaseClass.RequestChangeSchedule;
 import com.example.cnpm.DatabaseClass.User;
 import javafx.fxml.FXML;
@@ -35,13 +36,12 @@ public class StatusProfile implements Initializable {
     private Label tangCaLabel;
     @FXML
     private Pane taskBarPane;
-    public void setUser(User user,Stage stage) {
+
+    public void setUser(User user, Stage stage) {
         this.user = user;
         this.stage = stage;
 
         nameLabel.setText(user.getName());
-        DataBaseConnector db = new DataBaseConnector();
-        db.connect();
 
         int amountNghi = 0;
         int amountNghiPhep = 0;
@@ -49,8 +49,8 @@ public class StatusProfile implements Initializable {
         int amountTangCa = 0;
         int amountDiMuon = 0;
         System.out.println(user.getId());
-        List<RequestChangeSchedule> allRequests = db.getLeaveRequestsForUserByUserId(user.getId());
-        db.disconnect();
+        List<RequestChangeSchedule> allRequests = DataBaseConnector.INSTANCE.getLeaveRequestsForUserByUserId(user.getId());
+//        db.disconnect();
         for (RequestChangeSchedule request : allRequests) {
             System.out.println("RequestID: " + request.getRequestID() +
                     ", UserID: " + request.getUserID() +
@@ -83,12 +83,13 @@ public class StatusProfile implements Initializable {
         doiLichLabel.setText(String.valueOf(amountDoiLich));
         tangCaLabel.setText(String.valueOf(amountTangCa));
         lateLabel.setText(String.valueOf(amountDiMuon));
-
     }
+
     @FXML
     public void closeStage() {
         stage.close();
     }
+
     @FXML
     public void minimizeStage() {
         stage.setIconified(true);

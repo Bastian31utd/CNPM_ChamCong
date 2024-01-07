@@ -1,36 +1,47 @@
 package com.example.cnpm;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class PersonalRanking implements Initializable {
     @FXML
     private TableView<PersonalRankingRow> personalRankingTableView;
-
     @FXML
     private TableColumn<PersonalRankingRow, String> rankColumn;
-
     @FXML
     private TableColumn<PersonalRankingRow, String> userIDColumn;
-
     @FXML
     private TableColumn<PersonalRankingRow, String> nameColumn;
+    @FXML
+    private Label label;
+    @FXML
+    private Pane taskBarPane;
+    private Stage stage;
+    private double xOffset;
+    private double yOffset;
     private String userID; // Thêm trường dữ liệu để lưu UserID
 
     public void setUserID(String userID) {
         this.userID = userID;
     }
+
     @FXML
     public void backButtonClicked(ActionEvent actionEvent) throws IOException {
         HelloApplication change = new HelloApplication();
@@ -42,7 +53,7 @@ public class PersonalRanking implements Initializable {
         // Gọi phương thức để thực hiện việc xếp hạng
         rankEmployees();
     }
-    DataBaseConnector db=new DataBaseConnector();
+
     @FXML
     private void handleSortButton(ActionEvent event) {
         // Gọi phương thức để thực hiện việc xếp hạng khi nút sắp xếp được nhấn
@@ -51,14 +62,13 @@ public class PersonalRanking implements Initializable {
 
     private void rankEmployees() {
         try {
-            db.connect();
             String query = "SELECT u.UserID, u.Name, " +
                     "(SELECT COUNT(*) FROM Attendance WHERE UserID = u.UserID AND Late = true) AS late_count, " +
                     "(SELECT COUNT(*) FROM LeaveRequest WHERE UserID = u.UserID AND RequestType = 'Nghỉ phép' AND Status = 'Confirm') AS leave_count, " +
                     "(SELECT COUNT(*) FROM LeaveRequest WHERE UserID = u.UserID AND RequestType = 'Tăng ca' AND Status = 'Confirm') AS overtime_count " +
                     "FROM Users u";
 
-            PreparedStatement statement = db.getConnection().prepareStatement(query);
+            PreparedStatement statement = DataBaseConnector.INSTANCE.getConnection().prepareStatement(query);
             ResultSet resultSet = statement.executeQuery();
 
             ObservableList<PersonalRankingRow> rankings = FXCollections.observableArrayList();
@@ -85,67 +95,10 @@ public class PersonalRanking implements Initializable {
             // Set the items in TableView
             personalRankingTableView.setItems(rankings);
 
-            db.disconnect();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-/*Xếp hạng phòng,ban
-    @FXML
-    private void handleDepartmentRankingButton(ActionEvent event) {
-        departmentsRanking();
-    }
-
-    private void departmentsRanking() {
-        try {
-            db.connect();
-            String query = "SELECT d.DepartmentID, d.DepartmentName, " +
-                    "SUM((SELECT COUNT(*) FROM LeaveRequest WHERE UserID = u.UserID AND RequestType = 'Tăng ca' AND Status = 'Confirm') * 3 " +
-                    "- (SELECT COUNT(*) FROM Attendance WHERE UserID = u.UserID AND Late = true) * 2 " +
-                    "- (SELECT COUNT(*) FROM LeaveRequest WHERE UserID = u.UserID AND RequestType = 'Nghỉ phép' AND Status = 'Confirm') * 5) AS TotalPoints, " +
-                    "COUNT(u.UserID) AS EmployeeCount " +
-                    "FROM Users u " +
-                    "JOIN Departments d ON u.DepartmentID = d.DepartmentID " +
-                    "GROUP BY d.DepartmentID, d.DepartmentName";
-
-
-            PreparedStatement statement = db.getConnection().prepareStatement(query);
-            ResultSet resultSet = statement.executeQuery();
-
-
-                // Create a StringBuilder to store department rankings
-                StringBuilder departmentRankings = new StringBuilder();
-
-                while (resultSet.next()) {
-                    int departmentId = resultSet.getInt("DepartmentID");
-                    String departmentName = resultSet.getString("DepartmentName");
-                    int totalPoints = resultSet.getInt("TotalPoints");
-                    int employeeCount = resultSet.getInt("EmployeeCount");
-
-                    // Calculate average points
-                    double averagePoints = (double) totalPoints / employeeCount;
-
-                    // Append information to the department rankings string
-                    departmentRankings.append("DepartmentID: ").append(departmentId)
-                            .append(" - DepartmentName: ").append(departmentName)
-                            .append("\n");
-                }
-
-
-            // Clear previous items in the ListView
-            rankingListView.getItems().clear();
-
-            // Display the department rankings in the ListView
-            rankingListView.getItems().add(departmentRankings.toString());
-
-            db.disconnect();
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }*/
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -153,6 +106,27 @@ public class PersonalRanking implements Initializable {
         userIDColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getuserID()));
         nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getname()));
 
+        taskBarPane.setOnMousePressed(mouseEvent -> {
+            xOffset = mouseEvent.getSceneX();
+            yOffset = mouseEvent.getSceneY();
+        });
+        taskBarPane.setOnMouseDragged(mouseEvent -> {
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
+            stage.setX(mouseEvent.getScreenX() - xOffset);
+            stage.setY(mouseEvent.getScreenY() - yOffset);
+        });
     }
-}
 
+    @FXML
+    void closeStage() {
+        Stage stage = (Stage) label.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    void minimizeStage() {
+        Stage stage = (Stage) label.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+}

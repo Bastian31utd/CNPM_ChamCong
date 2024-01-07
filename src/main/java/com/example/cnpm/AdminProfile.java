@@ -7,11 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -59,11 +58,8 @@ public class AdminProfile implements Initializable {
         // Lưu thông tin vào database
         isEditing = false;
         setFieldsEditable(false);
-        User user = new User(this.user.getId(),nameTextField.getText(), mailTextField.getText(), roomTextField.getText(), phoneTextField.getText() , positionTextField.getText());
-        DataBaseConnector dataBaseConnector = new DataBaseConnector();
-        dataBaseConnector.connect();
-        dataBaseConnector.updateProfile(user);
-        dataBaseConnector.disconnect();
+        User user = new User(this.user.getId(), nameTextField.getText(), mailTextField.getText(), roomTextField.getText(), phoneTextField.getText(), positionTextField.getText());
+        DataBaseConnector.INSTANCE.updateProfile(user);
     }
 
     // Hàm để thiết lập tính chất chỉnh sửa cho các TextField
@@ -75,6 +71,7 @@ public class AdminProfile implements Initializable {
         roomTextField.setText(user.getDepartment());
         positionTextField.setText(user.getRole());
     }
+
     private void setFieldsEditable(boolean editable) {
         nameTextField.setEditable(editable);
         mailTextField.setEditable(editable);
@@ -83,8 +80,9 @@ public class AdminProfile implements Initializable {
         saveBtn.setDisable(!editable);
         chinhSuaBtn.setDisable(editable);
     }
+
     @FXML
-    private void changeAvatar(){
+    private void changeAvatar() {
         //Chọn ảnh từ thư viện
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Chọn ảnh");
@@ -101,8 +99,9 @@ public class AdminProfile implements Initializable {
             avaPlace.setFill(new javafx.scene.paint.ImagePattern(image));
         }
     }
+
     @FXML
-    private void viewScheduleStaff(){
+    private void viewScheduleStaff() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CalendarView.fxml"));
         try {
             AnchorPane root = loader.load();
@@ -121,14 +120,15 @@ public class AdminProfile implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
-    private void listRequestChangeSchedule(){
+    private void listRequestChangeSchedule() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("ViewRequestLeaveStaff.fxml"));
         try {
             AnchorPane root = loader.load();
             ChangeScheduleAdminController controller = loader.getController();
             Stage newStage = new Stage();
-            controller.setUser(user,newStage);
+            controller.setUser(user, newStage);
             // Create a new stage
 
             newStage.setTitle("Đăng ký thay đổi lịch làm việc");
@@ -143,6 +143,7 @@ public class AdminProfile implements Initializable {
             e.printStackTrace();
         }
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Khởi tạo trạng thái ban đầu của các TextField

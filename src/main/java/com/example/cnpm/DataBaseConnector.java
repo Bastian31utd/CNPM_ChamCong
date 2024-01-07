@@ -13,11 +13,20 @@ import java.util.UUID;
 
 
 public class DataBaseConnector {
-    private static Connection connection;
+
+    public static DataBaseConnector INSTANCE;
     private final String databaseName;
+    private Connection connection;
 
     public DataBaseConnector() {
         this.databaseName = "database.db";
+    }
+
+    public static void init() {
+        if (null == INSTANCE) {
+            INSTANCE = new DataBaseConnector();
+            INSTANCE.connect();
+        }
     }
 
     public void connect() {
@@ -42,6 +51,20 @@ public class DataBaseConnector {
             }
         } catch (SQLException e) {
             System.err.println("Failed to disconnect from the database: " + e.getMessage());
+        }
+    }
+
+    /* Kiem tra UserId co ton tai trong bang */
+    public int checkUserId(String userID) {
+        try {
+            String query = "SELECT COUNT(*) AS cnt FROM Users WHERE UserID = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, userID);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.getInt("cnt");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 
@@ -136,6 +159,7 @@ public class DataBaseConnector {
             e.printStackTrace();
         }
     }
+
     /* Lấy RoleID của người dùng dựa trên UserID */
     public int getRoleID(String userID) {
         try {
@@ -177,8 +201,8 @@ public class DataBaseConnector {
 
             // Thực hiện truy vấn và lấy kết quả
             ResultSet resultSet = statement.executeQuery();
-                // Lấy giá trị từ kết quả truy vấn
-                return resultSet.getString(columnName);
+            // Lấy giá trị từ kết quả truy vấn
+            return resultSet.getString(columnName);
         } catch (SQLException e) {
             e.printStackTrace();
             return "Error";
@@ -259,7 +283,7 @@ public class DataBaseConnector {
         }
     }
 
-   public User getUserProfileFromId(String id) {
+    public User getUserProfileFromId(String id) {
         String sql = "SELECT *  FROM Users,Departments,Roles WHERE UserID = ? AND Users.RoleID = Roles.RoleID AND Users.DepartmentID = Departments.DepartmentID";
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -278,8 +302,9 @@ public class DataBaseConnector {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-       return null;
-   }
+        return null;
+    }
+
     public void updateProfile(User user) {
         String sql = "UPDATE Users SET Name = ?, PhoneNumber = ?, Email = ? WHERE UserID = ?";
         try {
@@ -288,13 +313,15 @@ public class DataBaseConnector {
             statement.setString(2, user.getPhone());
             statement.setString(3, user.getEmail());
             statement.setString(4, user.getId());
-            statement.executeUpdate();
+            executeUpdate(statement);
             System.out.println("Update profile successfully");
+            statement.close();
         } catch (SQLException e) {
             System.err.println("Update profile failed: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
     public List<WorkSchedule> getScheduleFromIdAndTime(String id_user, int year, int month) {
         String sql = "SELECT * FROM WorkSchedule WHERE UserID = ? AND strftime('%m', WorkDate) = ? AND strftime('%Y', WorkDate) = ?";
         List<WorkSchedule> listWorkSchedule = new ArrayList<>();
@@ -319,7 +346,7 @@ public class DataBaseConnector {
 
                 String shift = resultSet.getString("Shift");
                 String id_schedule = resultSet.getString("WorkScheduleID");
-                WorkSchedule workSchedule = new WorkSchedule(id_schedule, id_user , workDate, shift);
+                WorkSchedule workSchedule = new WorkSchedule(id_schedule, id_user, workDate, shift);
                 listWorkSchedule.add(workSchedule);
             }
         } catch (SQLException e) {
@@ -327,6 +354,7 @@ public class DataBaseConnector {
         }
         return listWorkSchedule;
     }
+
     public void sentRequestFromIdAndTime(String id_user, String type, Date date) {
         String sql = "INSERT INTO LeaveRequest (UserID, RequestType, RequestDate, Status, RequestID) VALUES (?, ?, ?, ?, ?)";
         try {
@@ -342,13 +370,14 @@ public class DataBaseConnector {
             statement.setString(3, formattedDate); // Sử dụng chuỗi đã được định dạng
             statement.setString(4, "Pending");
             statement.setString(5, randomID);
-            statement.executeUpdate();
+            executeUpdate(statement);
             System.out.println("Sent request successfully");
         } catch (SQLException e) {
             System.err.println("Sent request failed: " + e.getMessage());
             e.printStackTrace();
         }
     }
+
     public List<RequestChangeSchedule> getLeaveRequestsForUser() {
         List<RequestChangeSchedule> requests = new ArrayList<>();
 
@@ -357,34 +386,35 @@ public class DataBaseConnector {
                 "INNER JOIN Users u ON lr.UserID = u.UserID";
 
         try {
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet resultSet = statement.executeQuery();
-                while (resultSet.next()) {
-                    // Lấy thông tin từ kết quả truy vấn và tạo các đối tượng RequestChangeSchedule
-                    String requestID = resultSet.getString("RequestID");
-                    String userId = resultSet.getString("UserID");
-                    String requestType = resultSet.getString("RequestType");
-                    String workDateString = resultSet.getString("RequestDate"); // Get the date as a string
-                    java.util.Date requestDate = null;
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                // Lấy thông tin từ kết quả truy vấn và tạo các đối tượng RequestChangeSchedule
+                String requestID = resultSet.getString("RequestID");
+                String userId = resultSet.getString("UserID");
+                String requestType = resultSet.getString("RequestType");
+                String workDateString = resultSet.getString("RequestDate"); // Get the date as a string
+                java.util.Date requestDate = null;
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-                    try {
-                        requestDate = sdf.parse(workDateString); // Parse the string into a Date object
-                    } catch (ParseException e) {
-                        e.printStackTrace(); // Handle parsing exception
-                    }
-                    String status = resultSet.getString("Status");
-                    String userName = resultSet.getString("Name");
-
-                    RequestChangeSchedule request = new RequestChangeSchedule(requestID, userId, requestType, requestDate, status, userName);
-                    requests.add(request);
+                try {
+                    requestDate = sdf.parse(workDateString); // Parse the string into a Date object
+                } catch (ParseException e) {
+                    e.printStackTrace(); // Handle parsing exception
                 }
+                String status = resultSet.getString("Status");
+                String userName = resultSet.getString("Name");
+
+                RequestChangeSchedule request = new RequestChangeSchedule(requestID, userId, requestType, requestDate, status, userName);
+                requests.add(request);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return requests;
     }
+
     public List<RequestChangeSchedule> getLeaveRequestsForUserByUserId(String UserId) {
         List<RequestChangeSchedule> requests = new ArrayList<>();
 
@@ -423,33 +453,37 @@ public class DataBaseConnector {
 
         return requests;
 
-   }
-
-    public void changeStatusRequests(String RequestID, String NewStatus) {
-       String sql = "UPDATE LeaveRequest SET Status = ? WHERE RequestID = ?";
-         try {
-              PreparedStatement statement = connection.prepareStatement(sql);
-              statement.setString(1, NewStatus);
-              statement.setString(2, RequestID);
-              statement.executeUpdate();
-              System.out.println("Update status successfully");
-         } catch (SQLException e) {
-              System.err.println("Update status failed: " + e.getMessage());
-              e.printStackTrace();
-         }
     }
 
-    public static void main(String[] args) {
-        DataBaseConnector connector = new DataBaseConnector();
-
-        // Connect to the database
-        connector.connect();
-
-        // Disconnect from the database
-        connector.disconnect();
+    public void changeStatusRequests(String RequestID, String NewStatus) {
+        String sql = "UPDATE LeaveRequest SET Status = ? WHERE RequestID = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, NewStatus);
+            statement.setString(2, RequestID);
+            executeUpdate(statement);
+            System.out.println("Update status successfully");
+        } catch (SQLException e) {
+            System.err.println("Update status failed: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public Connection getConnection() {
         return connection;
+    }
+
+    private void executeUpdate(PreparedStatement preparedStatement) {
+        try {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                preparedStatement.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
