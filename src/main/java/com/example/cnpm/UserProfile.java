@@ -9,12 +9,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-
-import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -25,10 +23,10 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class UserProfile implements Initializable {
+    public User user;
     private double xOffset;
     private double yOffset;
     private Stage stage;
-    public User user;
     @FXML
     private TextField roomTextField;
     @FXML
@@ -67,11 +65,8 @@ public class UserProfile implements Initializable {
         // Lưu thông tin vào database
         isEditing = false;
         setFieldsEditable(false);
-        User user = new User(this.user.getId(),nameTextField.getText(), mailTextField.getText(), roomTextField.getText(), phoneTextField.getText() , positionTextField.getText());
-        DataBaseConnector dataBaseConnector = new DataBaseConnector();
-        dataBaseConnector.connect();
-        dataBaseConnector.updateProfile(user);
-        dataBaseConnector.disconnect();
+        User user = new User(this.user.getId(), nameTextField.getText(), mailTextField.getText(), roomTextField.getText(), phoneTextField.getText(), positionTextField.getText());
+        DataBaseConnector.INSTANCE.updateProfile(user);
     }
 
     // Hàm để thiết lập tính chất chỉnh sửa cho các TextField
@@ -84,6 +79,7 @@ public class UserProfile implements Initializable {
         roomTextField.setText(user.getDepartment());
         positionTextField.setText(user.getRole());
     }
+
     private void setFieldsEditable(boolean editable) {
         nameTextField.setEditable(editable);
         mailTextField.setEditable(editable);
@@ -92,8 +88,9 @@ public class UserProfile implements Initializable {
         saveBtn.setDisable(!editable);
         chinhSuaBtn.setDisable(editable);
     }
+
     @FXML
-    private void changeAvatar(){
+    private void changeAvatar() {
         //Chọn ảnh từ thư viện
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Chọn ảnh");
@@ -110,8 +107,9 @@ public class UserProfile implements Initializable {
             avaPlace.setFill(new javafx.scene.paint.ImagePattern(image));
         }
     }
+
     @FXML
-    private void viewSchedule(){
+    private void viewSchedule() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CalendarView.fxml"));
         try {
             AnchorPane root = loader.load();
@@ -130,14 +128,15 @@ public class UserProfile implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
-    private void sentRequestChangeSchedule(){
+    private void sentRequestChangeSchedule() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("SentChangeScheduleForm.fxml"));
         try {
             AnchorPane root = loader.load();
             ChangeScheduleStaffController controller = loader.getController();
             Stage newStage = new Stage();
-            controller.setUser(user,newStage);
+            controller.setUser(user, newStage);
             // Create a new stage
 
             newStage.setTitle("Đăng ký thay đổi lịch làm việc");
@@ -152,6 +151,7 @@ public class UserProfile implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     private void viewProfileStatus() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("StatusProfile.fxml"));
@@ -159,10 +159,10 @@ public class UserProfile implements Initializable {
             AnchorPane root = loader.load();
             StatusProfile controller = loader.getController();
             Stage newStage = new Stage();
-            controller.setUser(user,newStage);
+            controller.setUser(user, newStage);
             // Create a new stage
 
-            newStage.setTitle("Đăng ký thay đổi lịch làm việc");
+            newStage.setTitle("Xem trạng thái cá nhân");
             newStage.initStyle(StageStyle.UNDECORATED);
             // Set the loaded content onto the new stage
             Scene scene = new Scene(root);
@@ -174,21 +174,25 @@ public class UserProfile implements Initializable {
             e.printStackTrace();
         }
     }
+
     @FXML
     void closeStage() {
         Stage stage = (Stage) nameTextField.getScene().getWindow();
         stage.close();
     }
+
     @FXML
     void minimizeStage() {
         Stage stage = (Stage) nameTextField.getScene().getWindow();
         stage.setIconified(true);
     }
+
     @FXML
     void logOut() throws IOException {
         Parent pane = FXMLLoader.load(getClass().getResource("start-view.fxml"));
         this.stage.getScene().setRoot(pane);
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Khởi tạo trạng thái ban đầu của các TextField
@@ -200,7 +204,7 @@ public class UserProfile implements Initializable {
             yOffset = mouseEvent.getSceneY();
         });
         taskBarPane.setOnMouseDragged(mouseEvent -> {
-            Stage stage = (Stage) ((Node)mouseEvent.getSource()).getScene().getWindow();
+            Stage stage = (Stage) ((Node) mouseEvent.getSource()).getScene().getWindow();
             stage.setX(mouseEvent.getScreenX() - xOffset);
             stage.setY(mouseEvent.getScreenY() - yOffset);
         });

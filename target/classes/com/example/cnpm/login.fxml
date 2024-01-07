@@ -21,17 +21,17 @@
                         <Image url="@../../../pic/679a8ce044245372ca495c4c9c151225.png" />
                     </image>
                 </ImageView>
-                <Label layoutX="32.0" layoutY="144.0" prefHeight="35.0" prefWidth="71.0" text="Username" textFill="#aa0000">
+                <Label layoutX="14.0" layoutY="142.0" prefHeight="35.0" prefWidth="99.0" text="Tên đăng nhập" textFill="#aa0000">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <Label layoutX="31.0" layoutY="195.0" prefHeight="35.0" prefWidth="71.0" text="Password" textFill="#aa0000">
+                <Label layoutX="32.0" layoutY="193.0" prefHeight="35.0" prefWidth="63.0" text="Mật khẩu" textFill="#aa0000">
                     <font>
                         <Font name="System Bold" size="14.0" />
                     </font>
                 </Label>
-                <Label fx:id="wronglogin" layoutX="129.0" layoutY="176.0" prefHeight="17.0" prefWidth="175.0" textFill="RED" />
+                <Label fx:id="wronglogin" alignment="CENTER" contentDisplay="CENTER" layoutX="105.0" layoutY="179.0" prefHeight="17.0" prefWidth="229.0" textFill="RED" />
                 <Label layoutX="116.0" layoutY="90.0" text="ĐĂNG NHẬP" textFill="#0598ff">
                     <font>
                         <Font name="System Bold" size="18.0" />
@@ -39,13 +39,19 @@
                 </Label>
                 <TextField fx:id="username" layoutX="131.0" layoutY="146.0" prefHeight="25.0" prefWidth="179.0" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" text="username" />
                 <PasswordField fx:id="pass" layoutX="128.0" layoutY="197.0" prefHeight="25.0" prefWidth="183.0" style="-fx-background-color: transparent; -fx-border-color: #0598ff; -fx-border-width: 0px 0px 2px 0px;" text="password" />
-                <Button layoutX="144.0" layoutY="271.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="25.0" prefWidth="73.0" style="-fx-background-color: #0598ff;" text="Log in" textFill="WHITE">
+                <Button layoutX="137.0" layoutY="267.0" mnemonicParsing="false" onAction="#loginButton" prefHeight="29.0" prefWidth="87.0" style="-fx-background-color: #0598ff;" text="Đăng nhập" textFill="WHITE">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Button>
-                <Hyperlink layoutX="114.0" layoutY="305.0" onAction="#forgotpass" text="Forgot Your Password ? " />
-                <Hyperlink layoutX="129.0" layoutY="332.0" onAction="#backToStartView" text="Back to Start View" />
+                <Hyperlink layoutX="125.0" layoutY="301.0" onAction="#forgotpass" text="Quên mật khẩu?">
+               <font>
+                  <Font size="14.0" />
+               </font></Hyperlink>
+                <Hyperlink layoutX="151.0" layoutY="326.0" onAction="#backToStartView" text="Quay lại">
+               <font>
+                  <Font size="14.0" />
+               </font></Hyperlink>
             </children>
         </AnchorPane>
     </center>
@@ -72,7 +78,7 @@
         </AnchorPane>
     </left>
    <top>
-      <Pane fx:id="taskBarPane" prefHeight="23.0" prefWidth="516.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+      <Pane fx:id="taskBarPane" prefHeight="23.0" prefWidth="600.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="16.0" fitWidth="18.0" layoutX="9.0" layoutY="4.0" onMouseClicked="#closeStage">
                <image>

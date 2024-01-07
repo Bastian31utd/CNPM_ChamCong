@@ -1,7 +1,6 @@
 package com.example.cnpm;
 
 import com.example.cnpm.DatabaseClass.RequestChangeSchedule;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -10,6 +9,7 @@ import javafx.scene.layout.VBox;
 
 public class ControlApproveBar {
     private RequestChangeSchedule request;
+
     private VBox findVBoxParent(Node node) {
         Parent parent = node.getParent();
         while (parent != null) {
@@ -20,12 +20,10 @@ public class ControlApproveBar {
         }
         return null;
     }
+
     @FXML
     public void approve(MouseEvent mouseEvent) {
-        DataBaseConnector db = new DataBaseConnector();
-        db.connect();
-        db.changeStatusRequests(request.getRequestID(),"Accepted");
-        db.disconnect();
+        DataBaseConnector.INSTANCE.changeStatusRequests(request.getRequestID(), "Accepted");
         Node sourceNode = (Node) mouseEvent.getSource();
         VBox vbox = findVBoxParent(sourceNode);
         System.out.println(vbox);
@@ -33,12 +31,10 @@ public class ControlApproveBar {
             vbox.getChildren().remove(sourceNode);
         }
     }
+
     @FXML
     public void decline(MouseEvent mouseEvent) {
-        DataBaseConnector db = new DataBaseConnector();
-        db.connect();
-        db.changeStatusRequests(request.getRequestID(),"Declined");
-        db.disconnect();
+        DataBaseConnector.INSTANCE.changeStatusRequests(request.getRequestID(), "Declined");
         Node sourceNode = (Node) mouseEvent.getSource();
         VBox vbox = findVBoxParent(sourceNode);
 
@@ -46,6 +42,7 @@ public class ControlApproveBar {
             vbox.getChildren().remove(sourceNode);
         }
     }
+
     public void setRequestsData(RequestChangeSchedule request) {
         this.request = request;
     }
